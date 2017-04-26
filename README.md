@@ -1,6 +1,6 @@
 # npmdoc-json-pointer
 
-#### api documentation for  [json-pointer (v0.6.0)](https://github.com/manuelstofer/json-pointer)  [![npm package](https://img.shields.io/npm/v/npmdoc-json-pointer.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-json-pointer) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-json-pointer.svg)](https://travis-ci.org/npmdoc/node-npmdoc-json-pointer)
+#### basic api documentation for  [json-pointer (v0.6.0)](https://github.com/manuelstofer/json-pointer)  [![npm package](https://img.shields.io/npm/v/npmdoc-json-pointer.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-json-pointer) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-json-pointer.svg)](https://travis-ci.org/npmdoc/node-npmdoc-json-pointer)
 
 #### Some utilities for JSON pointers described by RFC 6901
 
@@ -58,7 +58,8 @@
     "scripts": {
         "test": "make test"
     },
-    "version": "0.6.0"
+    "version": "0.6.0",
+    "bin": {}
 }
 ```
 
