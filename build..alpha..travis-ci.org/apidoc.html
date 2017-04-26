@@ -117,6 +117,15 @@
 
         <li>
 
+            <a class="apidocElementLiA" href="#apidoc.element.json-pointer.index">
+            function <span class="apidocSignatureSpan">json-pointer.</span>index
+            <span class="apidocSignatureSpan">(obj, pointer, value)</span>
+            </a>
+
+        </li>
+
+        <li>
+
             <a class="apidocElementLiA" href="#apidoc.element.json-pointer.parse">
             function <span class="apidocSignatureSpan">json-pointer.</span>parse
             <span class="apidocSignatureSpan">(pointer)</span>
@@ -155,6 +164,109 @@
 
             <a class="apidocElementLiA" href="#apidoc.element.json-pointer.walk">
             function <span class="apidocSignatureSpan">json-pointer.</span>walk
+            <span class="apidocSignatureSpan">(obj, iterator, descend)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.json-pointer.index">module json-pointer.index</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json-pointer.index.index">
+            function <span class="apidocSignatureSpan">json-pointer.</span>index
+            <span class="apidocSignatureSpan">(obj, pointer, value)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json-pointer.index.compile">
+            function <span class="apidocSignatureSpan">json-pointer.index.</span>compile
+            <span class="apidocSignatureSpan">(refTokens)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json-pointer.index.dict">
+            function <span class="apidocSignatureSpan">json-pointer.index.</span>dict
+            <span class="apidocSignatureSpan">(obj, descend)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json-pointer.index.escape">
+            function <span class="apidocSignatureSpan">json-pointer.index.</span>escape
+            <span class="apidocSignatureSpan">(str)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json-pointer.index.get">
+            function <span class="apidocSignatureSpan">json-pointer.index.</span>get
+            <span class="apidocSignatureSpan">(obj, pointer)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json-pointer.index.has">
+            function <span class="apidocSignatureSpan">json-pointer.index.</span>has
+            <span class="apidocSignatureSpan">(obj, pointer)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json-pointer.index.parse">
+            function <span class="apidocSignatureSpan">json-pointer.index.</span>parse
+            <span class="apidocSignatureSpan">(pointer)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json-pointer.index.remove">
+            function <span class="apidocSignatureSpan">json-pointer.index.</span>remove
+            <span class="apidocSignatureSpan">(obj, pointer)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json-pointer.index.set">
+            function <span class="apidocSignatureSpan">json-pointer.index.</span>set
+            <span class="apidocSignatureSpan">(obj, pointer, value)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json-pointer.index.unescape">
+            function <span class="apidocSignatureSpan">json-pointer.index.</span>unescape
+            <span class="apidocSignatureSpan">(str)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json-pointer.index.walk">
+            function <span class="apidocSignatureSpan">json-pointer.index.</span>walk
             <span class="apidocSignatureSpan">(obj, iterator, descend)</span>
             </a>
 
@@ -212,20 +324,21 @@
     return &#x27;/&#x27; + refTokens.map(api.escape).join(&#x27;/&#x27;);
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-Converts a JSON pointer into an array of reference tokens.
 
-```Javascript
-pointer.parse(&#x27;/hello/bla&#x27;);            // -&#x3e; [&#x27;hello&#x27;, &#x27;bla&#x27;]
-```
+    (function next (cur) {
+        each(cur, function (value, key) {
+            refTokens.push(String(key));
+            if (descend(value)) {
+                next(value);
+            } else {
+                iterator(value, api.<span class="apidocCodeKeywordSpan">compile</span>(refTokens));
+            }
+            refTokens.pop();
+        });
+    }(obj));
+};
 
-
-### .<span class="apidocCodeKeywordSpan">compile</span>(array)
-
-Builds a json pointer from an array of reference tokens.
-
-```Javascript
-pointer.compile([&#x27;hello&#x27;, &#x27;bla&#x27;]);      // -&#x3e; &#x27;/hello/bla&#x27;
-```
+/**
 ...</pre></li>
     </ul>
 
@@ -317,21 +430,21 @@ pointer.escape(&#x27;hello/bla&#x27;);            // -&#x3e; &#x27;hello~1bla&#x
     return obj;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-## API
+ */
 
-```Javascript
-var pointer = require(&#x27;json-pointer&#x27;);
-```
+function api (obj, pointer, value) {
+// .set()
+if (arguments.length === 3) {
+    return api.set(obj, pointer, value);
+}
+// .<span class="apidocCodeKeywordSpan">get</span>()
+if (arguments.length === 2) {
+    return api.get(obj, pointer);
+}
+// Return a partially applied function on `obj`.
+var wrapped = api.bind(api, obj);
 
-
-### .<span class="apidocCodeKeywordSpan">get</span>(object, pointer)
-
-Looks up a JSON pointer in an object.
-
-Array of reference tokens, e.g. returned by api.parse, can be passed as a pointer to .get, .set and .remove methods.
-
-```Javascript
-var obj = {
+// Support for oo style
 ...</pre></li>
     </ul>
 
@@ -374,6 +487,38 @@ var obj = {
 
 
     <h2>
+        <a href="#apidoc.element.json-pointer.index" id="apidoc.element.json-pointer.index">
+        function <span class="apidocSignatureSpan">json-pointer.</span>index
+        <span class="apidocSignatureSpan">(obj, pointer, value)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function api(obj, pointer, value) {
+    // .set()
+    if (arguments.length === 3) {
+        return api.set(obj, pointer, value);
+    }
+    // .get()
+    if (arguments.length === 2) {
+        return api.get(obj, pointer);
+    }
+    // Return a partially applied function on `obj`.
+    var wrapped = api.bind(api, obj);
+
+    // Support for oo style
+    for (var name in api) {
+        if (api.hasOwnProperty(name)) {
+            wrapped[name] = api[name].bind(wrapped, obj);
+        }
+    }
+    return wrapped;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
         <a href="#apidoc.element.json-pointer.parse" id="apidoc.element.json-pointer.parse">
         function <span class="apidocSignatureSpan">json-pointer.</span>parse
         <span class="apidocSignatureSpan">(pointer)</span>
@@ -386,20 +531,21 @@ var obj = {
     return pointer.substring(1).split(/\//).map(api.unescape);
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
+ * Lookup a json pointer in an object
+ *
+ * @param {Object} obj
+ * @param {String|Array} pointer
+ * @returns {*}
+ */
+api.get = function get (obj, pointer) {
+var refTokens = Array.isArray(pointer) ? pointer : api.<span class="apidocCodeKeywordSpan">parse</span>(pointer);
 
-```Javascript
-pointer.unescape(&#x27;hello~0bla&#x27;);         // -&#x3e; &#x27;hello~bla&#x27;
-pointer.unescape(&#x27;hello~1bla&#x27;);         // -&#x3e; &#x27;hello/bla&#x27;
-```
-
-
-### .<span class="apidocCodeKeywordSpan">parse</span>(str)
-
-Converts a JSON pointer into an array of reference tokens.
-
-```Javascript
-pointer.parse(&#x27;/hello/bla&#x27;);            // -&#x3e; [&#x27;hello&#x27;, &#x27;bla&#x27;]
-```
+for (var i = 0; i &#x3c; refTokens.length; ++i) {
+    var tok = refTokens[i];
+    if (!(typeof obj == &#x27;object&#x27; &#x26;&#x26; tok in obj)) {
+        throw new Error(&#x27;Invalid reference token: &#x27; + tok);
+    }
+    obj = obj[tok];
 ...</pre></li>
     </ul>
 
@@ -486,21 +632,21 @@ var obj = {
     return this;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-        bla: &#x27;hello&#x27;
-    }
-};
-pointer.get(obj, &#x27;/example/bla&#x27;);
-```
+ * @param {Object} obj
+ * @param {String|Array} pointer
+ * @param value
+ * @returns {*}
+ */
 
-
-### .<span class="apidocCodeKeywordSpan">set</span>(object, pointer, value)
-
-Sets a new value on object at the location described by pointer.
-
-```Javascript
-var obj = {};
-pointer.set(obj, &#x27;/example/bla&#x27;, &#x27;hello&#x27;);
-```
+function api (obj, pointer, value) {
+// .<span class="apidocCodeKeywordSpan">set</span>()
+if (arguments.length === 3) {
+    return api.set(obj, pointer, value);
+}
+// .get()
+if (arguments.length === 2) {
+    return api.get(obj, pointer);
+}
 ...</pre></li>
     </ul>
 
@@ -565,20 +711,445 @@ pointer.unescape(&#x27;hello~1bla&#x27;);         // -&#x3e; &#x27;hello/bla&#x2
     }(obj));
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-// Returns:
-// {
-//    &#x27;/hello/bla&#x27;: &#x27;example&#x27;
-// }
+*
+* @param obj
+* @param {function} descend
+* @returns {}
+*/
+api.dict = function dict (obj, descend) {
+   var results = {};
+   api.<span class="apidocCodeKeywordSpan">walk</span>(obj, function (value, pointer) {
+       results[pointer] = value;
+   }, descend);
+   return results;
+};
+
+/**
+* Iterates over an object
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.json-pointer.index" id="apidoc.module.json-pointer.index">module json-pointer.index</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.json-pointer.index.index" id="apidoc.element.json-pointer.index.index">
+        function <span class="apidocSignatureSpan">json-pointer.</span>index
+        <span class="apidocSignatureSpan">(obj, pointer, value)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function api(obj, pointer, value) {
+    // .set()
+    if (arguments.length === 3) {
+        return api.set(obj, pointer, value);
+    }
+    // .get()
+    if (arguments.length === 2) {
+        return api.get(obj, pointer);
+    }
+    // Return a partially applied function on `obj`.
+    var wrapped = api.bind(api, obj);
+
+    // Support for oo style
+    for (var name in api) {
+        if (api.hasOwnProperty(name)) {
+            wrapped[name] = api[name].bind(wrapped, obj);
+        }
+    }
+    return wrapped;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json-pointer.index.compile" id="apidoc.element.json-pointer.index.compile">
+        function <span class="apidocSignatureSpan">json-pointer.index.</span>compile
+        <span class="apidocSignatureSpan">(refTokens)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function compile(refTokens) {
+    if (refTokens.length === 0) { return &#x27;&#x27;; }
+    return &#x27;/&#x27; + refTokens.map(api.escape).join(&#x27;/&#x27;);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+    (function next (cur) {
+        each(cur, function (value, key) {
+            refTokens.push(String(key));
+            if (descend(value)) {
+                next(value);
+            } else {
+                iterator(value, api.<span class="apidocCodeKeywordSpan">compile</span>(refTokens));
+            }
+            refTokens.pop();
+        });
+    }(obj));
+};
+
+/**
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json-pointer.index.dict" id="apidoc.element.json-pointer.index.dict">
+        function <span class="apidocSignatureSpan">json-pointer.index.</span>dict
+        <span class="apidocSignatureSpan">(obj, descend)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function dict(obj, descend) {
+    var results = {};
+    api.walk(obj, function (value, pointer) {
+        results[pointer] = value;
+    }, descend);
+    return results;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    example: &#x27;hello&#x27;
+};
+pointer.remove(obj, &#x27;/example&#x27;);
+// obj -&#x3e; {}
 ```
 
 
-### .<span class="apidocCodeKeywordSpan">walk</span>(object, iterator)
+### .<span class="apidocCodeKeywordSpan">dict</span>(object)
 
+Creates a dictionary object (pointer -&#x3e; value).
+
+```Javascript
+var obj = {
+    hello: {bla: &#x27;example&#x27;}
+};
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json-pointer.index.escape" id="apidoc.element.json-pointer.index.escape">
+        function <span class="apidocSignatureSpan">json-pointer.index.</span>escape
+        <span class="apidocSignatureSpan">(str)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function escape(str) {
+    return str.toString().replace(/~/g, &#x27;~0&#x27;).replace(/\//g, &#x27;~1&#x27;);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+};
+
+pointer.has(obj, &#x27;/bla&#x27;);               // -&#x3e; true
+pointer.has(obj, &#x27;/non/existing&#x27;);      // -&#x3e; false
+```
+
+
+### .<span class="apidocCodeKeywordSpan">escape</span>(str)
+
+Escapes a reference token.
+
+```Javascript
+pointer.escape(&#x27;hello~bla&#x27;);            // -&#x3e; &#x27;hello~0bla&#x27;
+pointer.escape(&#x27;hello/bla&#x27;);            // -&#x3e; &#x27;hello~1bla&#x27;
+```
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json-pointer.index.get" id="apidoc.element.json-pointer.index.get">
+        function <span class="apidocSignatureSpan">json-pointer.index.</span>get
+        <span class="apidocSignatureSpan">(obj, pointer)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function get(obj, pointer) {
+    var refTokens = Array.isArray(pointer) ? pointer : api.parse(pointer);
+
+    for (var i = 0; i &#x3c; refTokens.length; ++i) {
+        var tok = refTokens[i];
+        if (!(typeof obj == &#x27;object&#x27; &#x26;&#x26; tok in obj)) {
+            throw new Error(&#x27;Invalid reference token: &#x27; + tok);
+        }
+        obj = obj[tok];
+    }
+    return obj;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ */
+
+function api (obj, pointer, value) {
+// .set()
+if (arguments.length === 3) {
+    return api.set(obj, pointer, value);
+}
+// .<span class="apidocCodeKeywordSpan">get</span>()
+if (arguments.length === 2) {
+    return api.get(obj, pointer);
+}
+// Return a partially applied function on `obj`.
+var wrapped = api.bind(api, obj);
+
+// Support for oo style
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json-pointer.index.has" id="apidoc.element.json-pointer.index.has">
+        function <span class="apidocSignatureSpan">json-pointer.index.</span>has
+        <span class="apidocSignatureSpan">(obj, pointer)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function has(obj, pointer) {
+    try {
+        api.get(obj, pointer);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
 Just like:
 
 ```Javascript
 each(pointer.dict(obj), iterator);
 ```
+
+
+### .<span class="apidocCodeKeywordSpan">has</span>(object, pointer)
+
+Tests if an object has a value for a JSON pointer.
+
+```Javascript
+var obj = {
+    bla: &#x27;hello&#x27;
+};
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json-pointer.index.parse" id="apidoc.element.json-pointer.index.parse">
+        function <span class="apidocSignatureSpan">json-pointer.index.</span>parse
+        <span class="apidocSignatureSpan">(pointer)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function parse(pointer) {
+    if (pointer === &#x27;&#x27;) { return []; }
+    if (pointer.charAt(0) !== &#x27;/&#x27;) { throw new Error(&#x27;Invalid JSON pointer: &#x27; + pointer); }
+    return pointer.substring(1).split(/\//).map(api.unescape);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * Lookup a json pointer in an object
+ *
+ * @param {Object} obj
+ * @param {String|Array} pointer
+ * @returns {*}
+ */
+api.get = function get (obj, pointer) {
+var refTokens = Array.isArray(pointer) ? pointer : api.<span class="apidocCodeKeywordSpan">parse</span>(pointer);
+
+for (var i = 0; i &#x3c; refTokens.length; ++i) {
+    var tok = refTokens[i];
+    if (!(typeof obj == &#x27;object&#x27; &#x26;&#x26; tok in obj)) {
+        throw new Error(&#x27;Invalid reference token: &#x27; + tok);
+    }
+    obj = obj[tok];
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json-pointer.index.remove" id="apidoc.element.json-pointer.index.remove">
+        function <span class="apidocSignatureSpan">json-pointer.index.</span>remove
+        <span class="apidocSignatureSpan">(obj, pointer)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">remove = function (obj, pointer) {
+    var refTokens = Array.isArray(pointer) ? pointer : api.parse(pointer);
+    var finalToken = refTokens[refTokens.length -1];
+    if (finalToken === undefined) {
+        throw new Error(&#x27;Invalid JSON pointer for remove: &#x22;&#x27; + pointer + &#x27;&#x22;&#x27;);
+    }
+
+    var parent = api.get(obj, refTokens.slice(0, -1));
+    if (Array.isArray(parent)) {
+      var index = +finalToken;
+      if (finalToken === &#x27;&#x27; &#x26;&#x26; isNaN(index)) {
+        throw new Error(&#x27;Invalid array index: &#x22;&#x27; + finalToken + &#x27;&#x22;&#x27;);
+      }
+
+      Array.prototype.splice.call(parent, index, 1);
+    } else {
+      delete parent[finalToken];
+    }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+```Javascript
+var obj = {};
+pointer.set(obj, &#x27;/example/bla&#x27;, &#x27;hello&#x27;);
+```
+
+
+### .<span class="apidocCodeKeywordSpan">remove</span>(object, pointer)
+
+Removes an attribute of object referenced by pointer.
+
+```Javascript
+var obj = {
+    example: &#x27;hello&#x27;
+};
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json-pointer.index.set" id="apidoc.element.json-pointer.index.set">
+        function <span class="apidocSignatureSpan">json-pointer.index.</span>set
+        <span class="apidocSignatureSpan">(obj, pointer, value)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function set(obj, pointer, value) {
+    var refTokens = Array.isArray(pointer) ? pointer : api.parse(pointer),
+      nextTok = refTokens[0];
+
+    for (var i = 0; i &#x3c; refTokens.length - 1; ++i) {
+        var tok = refTokens[i];
+        if (tok === &#x27;-&#x27; &#x26;&#x26; Array.isArray(obj)) {
+          tok = obj.length;
+        }
+        nextTok = refTokens[i + 1];
+
+        if (!(tok in obj)) {
+            if (nextTok.match(/^(\d+|-)$/)) {
+                obj[tok] = [];
+            } else {
+                obj[tok] = {};
+            }
+        }
+        obj = obj[tok];
+    }
+    if (nextTok === &#x27;-&#x27; &#x26;&#x26; Array.isArray(obj)) {
+      nextTok = obj.length;
+    }
+    obj[nextTok] = value;
+    return this;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * @param {Object} obj
+ * @param {String|Array} pointer
+ * @param value
+ * @returns {*}
+ */
+
+function api (obj, pointer, value) {
+// .<span class="apidocCodeKeywordSpan">set</span>()
+if (arguments.length === 3) {
+    return api.set(obj, pointer, value);
+}
+// .get()
+if (arguments.length === 2) {
+    return api.get(obj, pointer);
+}
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json-pointer.index.unescape" id="apidoc.element.json-pointer.index.unescape">
+        function <span class="apidocSignatureSpan">json-pointer.index.</span>unescape
+        <span class="apidocSignatureSpan">(str)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function unescape(str) {
+    return str.replace(/~1/g, &#x27;/&#x27;).replace(/~0/g, &#x27;~&#x27;);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+```Javascript
+pointer.escape(&#x27;hello~bla&#x27;);            // -&#x3e; &#x27;hello~0bla&#x27;
+pointer.escape(&#x27;hello/bla&#x27;);            // -&#x3e; &#x27;hello~1bla&#x27;
+```
+
+
+### .<span class="apidocCodeKeywordSpan">unescape</span>(str)
+
+Unescape a reference token.
+
+```Javascript
+pointer.unescape(&#x27;hello~0bla&#x27;);         // -&#x3e; &#x27;hello~bla&#x27;
+pointer.unescape(&#x27;hello~1bla&#x27;);         // -&#x3e; &#x27;hello/bla&#x27;
+```
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json-pointer.index.walk" id="apidoc.element.json-pointer.index.walk">
+        function <span class="apidocSignatureSpan">json-pointer.index.</span>walk
+        <span class="apidocSignatureSpan">(obj, iterator, descend)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function walk(obj, iterator, descend) {
+    var refTokens = [];
+
+    descend = descend || function (value) {
+        var type = Object.prototype.toString.call(value);
+        return type === &#x27;[object Object]&#x27; || type === &#x27;[object Array]&#x27;;
+    };
+
+    (function next (cur) {
+        each(cur, function (value, key) {
+            refTokens.push(String(key));
+            if (descend(value)) {
+                next(value);
+            } else {
+                iterator(value, api.compile(refTokens));
+            }
+            refTokens.pop();
+        });
+    }(obj));
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+*
+* @param obj
+* @param {function} descend
+* @returns {}
+*/
+api.dict = function dict (obj, descend) {
+   var results = {};
+   api.<span class="apidocCodeKeywordSpan">walk</span>(obj, function (value, pointer) {
+       results[pointer] = value;
+   }, descend);
+   return results;
+};
+
+/**
+* Iterates over an object
 ...</pre></li>
     </ul>
 
